@@ -1,0 +1,103 @@
+{% load static %}
+{% load staticfiles %}
+<!DOCTYPE>
+<html>
+<head>
+    <title>
+        {% block title %}
+            Dreamer
+        {% endblock %}
+    </title>
+
+    <!-- INCLUDE all STYLESHEETS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+            <!-- Header -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-navbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="" class="navbar-brand">Dreamer</a>
+            </div>
+
+            <!--Menu Items -->
+            <div class="collapse navbar-collapse" id="top-navbar">
+                <ul class="nav navbar-nav">
+                    <li class="{% block home-active %}{% endblock %}">
+                        <a href="">
+                            Home
+                        </a>
+                    </li>
+                    <li class="{% block contests-active %}{% endblock %}">
+                        <a href="#">
+                            Contests
+                        </a>
+                    </li>
+                    <li class="{% block problems-active %}{% endblock %}">
+                        <a href="{% url 'problems:home' %}">
+                            Problems
+                        </a>
+                    </li>
+                </ul>
+
+            {% block logged_in_actions %}
+
+                {% if not user.is_authenticated %}
+
+
+                    {% include '_logged_in_actions.html' %}
+
+
+                {% else %}
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="">
+                            <a href="">
+                                Account
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="{% url 'users:logout' %}">
+                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;Logout
+                            </a>
+                        </li>
+                    </ul>
+
+
+                {% endif %}
+
+            {% endblock %}
+
+            </div>
+        </div>
+    </nav>
+    <div class="panel col-sm-8" id="panel-main">
+        {% block panel-breadcrumbs %}
+        {% endblock %}
+            {% block panel-main %}
+                <h2>
+                    Nothing to see here
+                </h2>
+            {% endblock %}
+    </div>
+    <div class="panel col-sm-3" id="panel-right">
+        <h2>
+            {% block panel-right %}
+                <img src="" class="img-circle">
+                <br>
+                {{ user.name }}
+            {% endblock %}
+        </h2>
+    </div>
+</html>

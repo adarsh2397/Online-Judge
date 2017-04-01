@@ -1,0 +1,40 @@
+{% extends '_base.html' %}
+
+{% block title %}
+    {{ p.name }}
+{% endblock %}
+
+{% block panel-main %}
+    <h2>{{ p.name }}</h2>
+    <small>{{ p.type }}&nbsp;&nbsp;{{ p.status }}</small>
+    <br>
+    <h4><strong>Problem Statement:</strong></h4>
+    <br>
+    <p>
+        {{ p.statement|linebreaks }}
+    </p>
+    <h4><strong>Input:</strong></h4>
+    <p>
+        {{ p.input|linebreaks }}
+    </p>
+    <h4><strong>Output:</strong></h4>
+    <p>
+        {{ p.output|linebreaks }}
+    </p>
+    <form action="{% url 'problems:submit' p.id %}" method="post">
+        {% csrf_token %}
+        <label for="language" class="control-label">Language: </label>
+        <select name="language">
+            {% for x in p.language %}
+                <option value="{{ x }}">{{ x }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <strong>Code:</strong>
+        <br>
+        <textarea style="height:400px;" name="code" class="form-control" placeholder="Type your code here..."></textarea>
+        <br>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+    <a href="{% url 'problems:display_submissions' p.id %}" class="btn btn-info">All Submissions</a>
+{% endblock %}

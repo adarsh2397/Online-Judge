@@ -1,0 +1,16 @@
+body{
+    background: url('../img/bg4.jpg');
+}
+
+.navbar{
+    border-radius: 0px;
+}
+
+#panel-main{
+    margin: 10px;
+}
+
+#panel-right{
+    margin: 10px;
+    text-align: center;
+}

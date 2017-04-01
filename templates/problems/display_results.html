@@ -1,0 +1,16 @@
+{% extends '_base.html' %}
+
+{% block title %}
+    Submissions
+{% endblock %}
+
+{% block panel-main %}
+    <h2>Submission Results</h2>
+    <h4><strong>
+        {% if run.result == "AC" %}
+            <p style="color:green">Correct Answer</p>
+        {% else %}
+            <p style="color:red">Wrong Answer (Error Code: {{ run.result }})</p>
+        {% endif %}
+    </strong></h4>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends '_base.html' %}
+
+{% block title %}
+    Submissions
+{% endblock %}
+
+{% block panel-breadcrumbs %}
+    <ul class="breadcrumb" style="margin-left: 0px;">
+        <li><a href="#">Home</a> </li>
+        <li><a href="{% url 'problems:home' %}">Problems</a> </li>
+        <li><a href="{% url 'problems:display_problem' problem.id %}">{{ problem.name }}</a> </li>
+        <li class="active">All Submissions </li>
+    </ul>
+{% endblock %}
+
+{% block panel-main %}
+    <h2>All Submissions</h2>
+    <br>
+    <h4><strong>Problem Name: {{ problem.name }}</strong></h4>
+    <br>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Run No</th>
+                <th>Status</th>
+                <th>Time Taken</th>
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for x in runs %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ x.result }}</td>
+                    <td>{{ x.time }}</td>
+                    <td>30</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

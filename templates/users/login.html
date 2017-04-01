@@ -1,0 +1,56 @@
+{% extends '_base.html' %}
+
+{% block title %}
+    Dreamer | Login
+{% endblock %}
+
+{% block panel-main %}
+    <h2>Login</h2>
+        <div class="container-fluid">
+    <div class="row">
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <div class="col-sm-12 col-md-6">
+                {% if error_message %}
+                    <p><strong>{{ error_message }}</strong></p>
+                {% endif %}
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <span class="text-danger small">{{ username_errors }}</span>
+                     </div>
+                    <label class="control-label col-sm-2">Username</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="username" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <span class="text-danger small">{{ password_errors }}</span>
+                     </div>
+                    <label class="control-label col-sm-2">Password</label>
+                    <div class="col-sm-8">
+                        <input type="password" name="password" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button class="btn btn-success">Login</button>
+                    </div>
+                </div>
+        </div>
+    </form>
+    </div>
+        </div>
+{% endblock %}
+
+{% block logged_in_actions %}
+    {% include '_logged_in_actions.html' %}
+{% endblock %}
+
+{% block panel-right %}
+    <style>
+    #panel-right{
+        display:none;
+    }
+    </style>
+{% endblock %}

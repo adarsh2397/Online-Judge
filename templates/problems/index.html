@@ -1,0 +1,38 @@
+{% extends '_base.html' %}
+
+{% block title %}
+    Problems
+{% endblock %}
+
+{% block problems-active %}
+    active
+{% endblock %}
+
+
+{% block panel-main %}
+    <h2>List of Problems</h2>
+    <a role="button" class="btn btn-primary" href="{% url 'problems:add_problem' %}">Add Problem</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>P.No</th>
+                <th>Problem Name</th>
+                <th>Author</th>
+                <th>Submissions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if p.len == 0 %}
+                <h4>No Problems to Display</h4>
+            {% endif %}
+            {% for p in problems %}
+                <tr>
+                <td>{{  forloop.counter }}</td>
+                <td><a href="{% url 'problems:display_problem' p.id %}">{{ p.name }}</a> </td>
+                <td>adarsh23</td>
+                <td>{{ p.solved }}/{{ p.total }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
