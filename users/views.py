@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
-from users.forms import UserForm
+from users.forms import UserForm, AdditionalDetails
 from django.views.generic import View
 from django.contrib.auth import authenticate,login,logout
+from users.models import UserDetails
+from django.views.generic import UpdateView
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 IMAGE_FILE_TYPES = ['jpg','png']
@@ -65,4 +68,57 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('users:login')
+
+class AdditionalDetailsView(View):
+    form_class = AdditionalDetails
+    template_name = 'users/additional_form.html'
+
+    #display empty form (default)
+    def get(self,request):
+        if request.user.is_authenticated:
+            if UserDetails.objects.get(user=request.user):
+                return redirect('problems:home')
+
+            form = self.form_class(None)
+            return render(request,self.template_name,{'form' : form,})
+        else:
+            return redirect('users:login')
+
+    def post(self,request):
+        if request.user.is_authenticated:
+            form = self.form_class(request.POST, request.FILES)
+            if form.is_valid():
+                user_details = form.save(commit=False)
+                user_details.user = request.user
+                user_details.profile_update = True
+                user_details.save()
+
+                context = {'user' : request.user}
+
+                return render(request,'problems/index.html', context)
+            else:
+                return render(request,'users/additional_form.html',{'form' : form})
+
+
+def my_view(request):
+    user_details = request.user.userdetails
+
+    if request.method == "POST":
+        form = AdditionalDetails(request.POST, request.FILES, instance=user_details)
+
+        if form.is_valid():
+            user_details = form.save(commit=False)
+            user_details.user = request.user
+            user_details.profile_update = True
+            user_details.save()
+
+            print("Hello")
+
+            return render(request,'users/additional_form.html',{'form':form})
+
+    else:
+        form = AdditionalDetails(instance=user_details)
+
+    return render(request,'users/additional_form.html',{'form':form})
+
 
