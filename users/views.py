@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate,login,logout
 from users.models import UserDetails
 from django.views.generic import UpdateView
 from django.shortcuts import get_object_or_404
+from problems.models import Runs
 # Create your views here.
 
 IMAGE_FILE_TYPES = ['jpg','png']
@@ -112,13 +113,18 @@ def my_view(request):
             user_details.profile_update = True
             user_details.save()
 
-            print("Hello")
-
             return render(request,'users/additional_form.html',{'form':form})
 
     else:
         form = AdditionalDetails(instance=user_details)
 
     return render(request,'users/additional_form.html',{'form':form})
+
+def profile_display(request):
+    details = {}
+    runs = Runs.objects.all().filter(user=request.user)
+    details['submissions'] = len(runs)
+    context = {'details' : details}
+    return render(request,'users/profile_display.html',context)
 
 

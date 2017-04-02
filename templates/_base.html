@@ -53,7 +53,7 @@
 
             {% block logged_in_actions %}
 
-                {% if not user.is_authenticated %}
+                {% if not request.user.is_authenticated %}
 
 
                     {% include '_logged_in_actions.html' %}
@@ -63,7 +63,7 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li class="">
-                            <a href="">
+                            <a href="{% url 'users:profile_display' %}">
                                 Account
                             </a>
                         </li>
@@ -92,12 +92,28 @@
             {% endblock %}
     </div>
     <div class="panel col-sm-3" id="panel-right">
-        <h2>
             {% block panel-right %}
-                <img src="" class="img-circle">
+                {% if request.user.userdetails.profile_image %}
+                    <img style="height:150px;width:150px;" src="{{ request.user.userdetails.profile_image.url }}" class="img-circle">
+                {% else %}
+                    <img style="height:150px;width:150px;" src="{% static 'img/default-profile-picture.jpg' %}" class="img-circle">
+                {% endif %}
                 <br>
-                {{ user.name }}
+                <h2>
+                    {{ request.user.first_name }}&nbsp;{{ request.user.last_name }}
+                </h2>
+                <table class="table table-striped">
+                    <tr>
+                        <td>Total Score</td>
+                        <td>{{ request.user.userdetails.total_score }}</td>
+                    </tr>
+                    <tr>
+                        <td>College: </td>
+                        <td>{{ request.user.userdetails.college }}</td>
+                    </tr>
+                </table>
             {% endblock %}
-        </h2>
     </div>
+    {% block after-content %}
+    {% endblock %}
 </html>

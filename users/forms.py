@@ -19,7 +19,7 @@ class AdditionalDetails(forms.ModelForm):
     college.widget.attrs['class'] = 'form-control'
     date_of_birth = forms.DateField(widget=forms.DateInput,required=False)
     date_of_birth.widget.attrs['class'] = 'form-control'
-    date_of_birth.widget.attrs['placeholder'] = '2017/04/21'
+    date_of_birth.widget.attrs['placeholder'] = 'YYYY-MM-DD'
     profile_image = forms.FileField(required=False)
 
     class Meta:
