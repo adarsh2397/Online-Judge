@@ -9,5 +9,5 @@ urlpatterns = [
     url(r'^(?P<problem_id>[0-9]+)/submit/$',views.submit_problem,name="submit"),
     url(r'^(?P<problem_id>[0-9]+)/results/(?P<run_id>[0-9]+)/$',views.display_results,name="display_results"),
     url(r'^(?P<problem_id>[0-9]+)/submissions/$',views.display_submissions,name="display_submissions"),
-
+    url(r'^(?P<problem_id>[0-9]+)/run/(?P<run_id>[0-9]+)$',views.display_problem_run,name="problem_detail_run"),
 ]

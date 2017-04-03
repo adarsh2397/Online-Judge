@@ -7,10 +7,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 
 def index(request):
-    context = {'user' : request.user}
-    p = Problems.objects.all()
-    context['problems'] = p
-    return render(request,'problems/index.html', context);
+    if request.user.is_authenticated:
+        context = {'user' : request.user}
+        p = Problems.objects.all()
+        context['problems'] = p
+        return render(request,'problems/index.html', context);
+    else:
+        return redirect('users:login')
 
 def add_problem_form(request):
 
@@ -19,17 +22,17 @@ def add_problem_form(request):
         user = request.user
 
         if request.method == "POST":
-            languages = ['c','cpp','c#','java','python','php']
+            languages = ['c','cpp','c#','java','python','python3']
+            selected_languages = list(set(languages) & set(request.POST.keys()))
+            display_languages = []
 
-            for x in languages:
-                if x in request.POST.keys():
-                    languages.remove(x)
-                    languages.insert(0,request.POST[x])
-                else:
-                    languages.remove(x)
-            language = ','.join(languages)
+            for x in selected_languages:
+                display_languages.insert(0,request.POST[x])
+
+            language = ','.join(display_languages)
 
             p = Problems()
+            p.author = user
             p.language = language
             p.statement = request.POST['statement']
             p.name = request.POST['name']
@@ -38,6 +41,7 @@ def add_problem_form(request):
             p.timelimit = request.POST['timelimit']
             p.type = request.POST['type']
             p.status = request.POST['status']
+            p.score = 10
             p.save()
 
             return redirect('problems:home')
@@ -63,6 +67,7 @@ def submit_problem(request,problem_id):
 
         if request.method == "POST":
             run = Runs()
+            run.user = request.user
             run.problem = p
             run.tid = 1
             run.language = request.POST['language']
@@ -86,6 +91,18 @@ def submit_problem(request,problem_id):
 
         return HttpResponse('<html>Hello World</html>')
 
+def display_problem_run(request,problem_id,run_id):
+    try:
+        p = get_object_or_404(Problems, pk=problem_id)
+        run = get_object_or_404(Runs, pk=run_id)
+        sub = get_object_or_404(Subs_code, run=run)
+        p.language = p.language.split(',')
+        context = {'p': p,'sub':sub}
+        return render(request,'problems/problem_detail.html',context)
+    except (KeyError, Problems.DoesNotExist):
+        context = {'error_message' : 'Problem does not exist'}
+        return render(request, 'problems/problem_detail.html', context)
+
 
 def trial(request):
     runjudge(1)
@@ -93,7 +110,10 @@ def trial(request):
 
 def display_results(request,problem_id,run_id):
     run = Runs.objects.get(pk=run_id)
-    context = {'run' : run}
+    sub = Subs_code.objects.get(run=run)
+    my_runs = Runs.objects.all().filter(user=run.user, problem=run.problem)
+    context = { 'sub' : sub, 'my_runs' : my_runs}
+
 
     return render(request,'problems/display_results.html',context)
 

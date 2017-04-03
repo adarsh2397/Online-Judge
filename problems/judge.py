@@ -232,7 +232,7 @@ def runjudge(subId):
     if sub.run.language in ('Java', 'Python', 'Python3', 'Ruby', 'PHP', 'C#', 'JavaScript'):
         if sub.run.language in ("Java", "C#", "JavaScript"):
             timelimit *= 2;
-        elif sub.run["language"] in ("Python", "Ruby", "PHP", "Python3"):
+        elif sub.run.language in ("Python", "Ruby", "PHP", "Python3"):
             timelimit *= 3;
 
     # Run the program through a new thread, and kill it after some time
@@ -295,17 +295,27 @@ def runjudge(subId):
             result = "WA"
     print("Output Judgement Complete.")
     sub.run.result = result
-    sub.run.timelimit = timetaken
+    sub.run.time = timetaken
+    if result == "AC":
+        sub.run.problem.solved += 1
+        sub.run.score = sub.run.problem.score
+        count_runs = Runs.objects.all().filter(user=sub.run.user, score=sub.run.problem.score)
+        if len(count_runs) == 0:
+            print("YES")
+            sub.run.user.userdetails.total_score += sub.run.score
+            sub.run.user.userdetails.save()
+        else: print(len(count_runs))
+
     # Write results to database
     error = file_read("environ/error.txt")
     sub.error = re.escape(error)
-    sub.output = re.escape(output)
+    sub.output = output
     sub.run.save()
     sub.save()
-
+    sub.run.problem.total += 1
     # update the solved variable
-    if result == "AC":
-        sub.run.problem.solved += 1
+
+    sub.run.problem.save()
     print("Result (%s,%.3f) updated on Server.\n" % (result, timetaken))
     sys.stdout.flush();
     # Commit changes
