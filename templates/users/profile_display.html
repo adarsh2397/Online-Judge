@@ -1,48 +1,55 @@
 {% extends '_base.html' %}
+{% load static %}
 
 {% block title %}
-    {{ request.user.first_name }}&nbsp;{{ request.user.last_name }}
+    {{ user.first_name }}&nbsp;{{ user.last_name }}
 {% endblock %}
 
 {% block panel-main %}
     <div class="col-sm-4">
-        <a href="{{ request.user.userdetails.profile_image.url }}">
-            <img src="{{ request.user.userdetails.profile_image.url }}" style="height:200px;width:200px;">
+    {% if user.userdetails.profile_image %}
+        <a href="{{ user.userdetails.profile_image.url }}">
+            <img src="{{ user.userdetails.profile_image.url }}" style="height:200px;width:200px;">
         </a>
+    {% else %}
+        <img style="height:150px;width:150px;" src="{% static 'img/default-profile-picture.jpg' %}" style="height:200px;width:200px;"w>
+    {% endif %}
     </div>
     <div class="col-sm-6">
-        <h2>{{ request.user.first_name }}&nbsp;{{ request.user.last_name }}</h2>
+        <h2>{{ user.first_name }}&nbsp;{{ user.last_name }}</h2>
         <p style="color:dimgray">
-            {{ request.user.userdetails.description }}
+            {{ user.userdetails.description }}
         </p>
         <br>
         <br>
         <br>
-        {% if request.user.userdetails.college %}
+        {% if user.userdetails.college %}
         <div class="row">
             <div class="col-sm-4">
                 <strong>College: </strong>
             </div>
             <div class="col-sm-4">
-                {{ request.user.userdetails.college }}
+                {{ user.userdetails.college }}
             </div>
         </div>
         {% endif %}
-        {% if request.user.userdetails.date_of_birth  %}
+        {% if user.userdetails.date_of_birth  %}
         <div class="row">
             <div class="col-sm-4">
                 <strong>Date of Birth: </strong>
             </div>
             <div class="col-sm-4">
-                {{ request.user.userdetails.date_of_birth }}
+                {{ user.userdetails.date_of_birth }}
             </div>
         </div>
         {% endif %}
     </div>
+    {% if user == request.user %}
     <div class="col-sm-2">
         <br>
         <a href="{% url 'users:additional-update' %}" class="btn btn-info">Edit</a>
     </div>
+    {% endif %}
 {% endblock %}
 
 {% block after-content %}
@@ -53,7 +60,7 @@
                 <strong>Total Score: </strong>
             </div>
             <div class="col-sm-4">
-                {{ request.user.userdetails.total_score }}
+                {{ user.userdetails.total_score }}
             </div>
         </div>
         <br>

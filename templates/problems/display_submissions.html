@@ -22,6 +22,7 @@
         <thead>
             <tr>
                 <th>Run No</th>
+                <th>User</th>
                 <th>Status</th>
                 <th>Time Taken</th>
                 <th>Points</th>
@@ -31,9 +32,10 @@
             {% for x in runs %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'users:profile_display' x.user.id %}">{{ x.user.username }}</a></td>
                     <td>{{ x.result }}</td>
                     <td>{{ x.time }}</td>
-                    <td>30</td>
+                    <td>{{ x.score }}</td>
                 </tr>
             {% endfor %}
         </tbody>

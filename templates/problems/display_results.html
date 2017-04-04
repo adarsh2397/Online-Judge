@@ -4,13 +4,48 @@
     Submissions
 {% endblock %}
 
+{% block panel-breadcrumbs %}
+    <ul class="breadcrumb" style="margin-left: 0px;">
+        <li><a href="#">Home</a> </li>
+        <li><a href="{% url 'problems:home' %}">Problems</a> </li>
+        <li><a href="{% url 'problems:display_problem' sub.run.problem.id %}">{{ sub.run.problem.name }}</a> </li>
+        <li class="active">Submission </li>
+    </ul>
+{% endblock %}
+
 {% block panel-main %}
     <h2>Submission Results</h2>
     <h4><strong>
-        {% if run.result == "AC" %}
+        {% if sub.run.result == "AC" %}
             <p style="color:green">Correct Answer</p>
         {% else %}
-            <p style="color:red">Wrong Answer (Error Code: {{ run.result }})</p>
+            <p style="color:red">Wrong Answer (Error Code: {{ sub.run.result }})</p>
         {% endif %}
     </strong></h4>
+    <div class="panel" style="background: lightgray;">
+        <strong>Output:</strong>
+        <p>
+        {{ sub.output|linebreaks }}
+        </p>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Language</th>
+                <th>Submit Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in my_runs %}
+                <tr {% if r.id == sub.run.id %} style="background-color: cadetblue;"{% endif %}>
+                    <td><a href="{% url 'problems:problem_detail_run' r.problem.id r.id %}">{{ forloop.counter }}</a></td>
+                    <td>{{ r.language }}</td>
+                    <td>{{ r.submittime }}</td>
+                    <td>{{ r.result }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

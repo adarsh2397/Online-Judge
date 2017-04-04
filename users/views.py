@@ -3,6 +3,7 @@ from users.forms import UserForm, AdditionalDetails
 from django.views.generic import View
 from django.contrib.auth import authenticate,login,logout
 from users.models import UserDetails
+from django.contrib.auth.models import User
 from django.views.generic import UpdateView
 from django.shortcuts import get_object_or_404
 from problems.models import Runs
@@ -46,7 +47,7 @@ class UserFormView(View):
 
                     login(request, user)
                     # you can access the User Details using request.Username ...etc
-                    return redirect('problems:home')
+                    return redirect('users:additional')
 
         return render(request, self.template_name, {'form': form, })
 
@@ -77,11 +78,12 @@ class AdditionalDetailsView(View):
     #display empty form (default)
     def get(self,request):
         if request.user.is_authenticated:
-            if UserDetails.objects.get(user=request.user):
+            try:
+                UserDetails.objects.get(user=request.user)
                 return redirect('problems:home')
-
-            form = self.form_class(None)
-            return render(request,self.template_name,{'form' : form,})
+            except UserDetails.DoesNotExist:
+                form = self.form_class(None)
+                return render(request, self.template_name, {'form': form, })
         else:
             return redirect('users:login')
 
@@ -96,7 +98,7 @@ class AdditionalDetailsView(View):
 
                 context = {'user' : request.user}
 
-                return render(request,'problems/index.html', context)
+                return redirect('problems:home')
             else:
                 return render(request,'users/additional_form.html',{'form' : form})
 
@@ -120,11 +122,12 @@ def my_view(request):
 
     return render(request,'users/additional_form.html',{'form':form})
 
-def profile_display(request):
+def profile_display(request,user_id):
     details = {}
+    user = User.objects.get(pk=user_id)
     runs = Runs.objects.all().filter(user=request.user)
     details['submissions'] = len(runs)
-    context = {'details' : details}
+    context = {'details' : details, 'user' : user}
     return render(request,'users/profile_display.html',context)
 
 

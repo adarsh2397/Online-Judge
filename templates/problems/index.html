@@ -29,7 +29,7 @@
                 <tr>
                 <td>{{  forloop.counter }}</td>
                 <td><a href="{% url 'problems:display_problem' p.id %}">{{ p.name }}</a> </td>
-                <td>adarsh23</td>
+                    <td><a href="{% url 'users:profile_display' p.author.id %}">{{ p.author }}</a></td>
                 <td>{{ p.solved }}/{{ p.total }}</td>
                 </tr>
             {% endfor %}

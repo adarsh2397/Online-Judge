@@ -4,18 +4,28 @@
 <html>
 <head>
     <title>
+    CodeHub |
         {% block title %}
-            Dreamer
         {% endblock %}
     </title>
 
     <!-- INCLUDE all STYLESHEETS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 
     <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </head>
+
+<style>
+    #website-label{
+        font:  24px/0.8 'Cookie', Helvetica, sans-serif;
+        color: #fff;
+        text-shadow: 4px 4px 3px rgba(0,0,0,0.1);
+    }
+</style>
+
 <body>
 
 <nav class="navbar navbar-inverse">
@@ -28,7 +38,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="" class="navbar-brand">Dreamer</a>
+                <a href="" class="navbar-brand"><span id="website-label">CodeHub</span></a>
             </div>
 
             <!--Menu Items -->
@@ -63,7 +73,7 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li class="">
-                            <a href="{% url 'users:profile_display' %}">
+                            <a href="{% url 'users:profile_display' request.user.id%}">
                                 Account
                             </a>
                         </li>
