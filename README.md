@@ -17,7 +17,7 @@ python manage.py runserver
 
 ### Things to Do
 The following improvements still have to be made
-- Change Name
+- ~~Change Name~~
 - Add features to profile display
 - Enable parallel running of submitted programs
 - Add Home and Contests Pages
